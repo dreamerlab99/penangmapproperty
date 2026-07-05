@@ -5,42 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dreamer Property Lab · 槟城房源地图</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="prefetch" href="https://www.dreamerlab.blog/propertylab">
+<link rel="prerender" href="https://www.dreamerlab.blog/propertylab">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
   height: 100%; overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
                'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #ebebeb;
 }
 body { display: flex; flex-direction: column; }
-
-/* ─── HEADER ─────────────────────────────────── */
-#header {
-  flex-shrink: 0; height: 52px;
-  background: rgba(255,255,255,0.85);
-  -webkit-backdrop-filter: saturate(180%) blur(28px);
-  backdrop-filter: saturate(180%) blur(28px);
-  border-bottom: 0.5px solid rgba(0,0,0,0.08);
-  padding: 0 20px;
-  display: flex; align-items: center; gap: 12px;
-  z-index: 200; position: relative;
-}
-.logo-mark {
-  width: 30px; height: 30px; flex-shrink: 0;
-  background: #111; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 13px; font-weight: 700; letter-spacing: -0.5px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.22);
-}
-.header-text h1 {
-  font-size: 13px; font-weight: 600; color: #111;
-  letter-spacing: 0.04em; line-height: 1;
-}
-.header-text p { font-size: 10.5px; color: #aaa; margin-top: 2px; letter-spacing: 0.02em; }
 
 /* ─── LAYOUT ──────────────────────────────────── */
 #main { flex: 1; display: flex; min-height: 0; }
@@ -56,16 +37,29 @@ body { display: flex; flex-direction: column; }
 
 /* ─── VIEW TOGGLE ─────────────────────────────── */
 #view-toggle {
-  margin-left: auto; flex-shrink: 0;
-  background: #111; color: #fff; border: none;
-  border-radius: 10px; padding: 7px 16px;
-  font-size: 12.5px; font-weight: 600; cursor: pointer;
-  font-family: inherit; letter-spacing: 0.01em;
-  display: flex; align-items: center; gap: 6px;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  display: flex; align-items: center; gap: 7px;
+  cursor: pointer; background: none; border: none;
+  padding: 2px 0; flex-shrink: 0; font-family: inherit;
 }
-#view-toggle:hover { background: #333; }
+#view-toggle-label {
+  font-size: 12px; font-weight: 500; color: #3c3c43;
+  white-space: nowrap; user-select: none;
+}
+#view-toggle-track {
+  width: 38px; height: 22px; border-radius: 11px;
+  background: #d1d1d6;
+  position: relative; flex-shrink: 0;
+  transition: background 0.22s ease;
+}
+#view-toggle-track.on { background: #111; }
+#view-toggle-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.28);
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+#view-toggle-track.on #view-toggle-thumb { transform: translateX(16px); }
 
 /* ─── SHARED FILTER BAR ───────────────────────── */
 #filter-bar {
@@ -76,10 +70,22 @@ body { display: flex; flex-direction: column; }
   border-bottom: 0.5px solid rgba(0,0,0,0.06);
   padding: 10px 16px;
   display: grid;
-  grid-template-columns: repeat(5, 1fr) auto;
+  grid-template-columns: auto repeat(5, 1fr) auto auto;
   gap: 7px;
   align-items: center;
 }
+
+/* ─── HOME BUTTON ─────────────────────────────── */
+#home-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: rgba(118,118,128,0.12);
+  border-radius: 10px;
+  text-decoration: none; color: #1c1c1e;
+  transition: background 0.18s cubic-bezier(0.4,0,0.2,1), transform 0.15s ease;
+}
+#home-btn:hover  { background: rgba(118,118,128,0.22); }
+#home-btn:active { background: rgba(118,118,128,0.30); transform: scale(0.93); }
 #filter-bar select {
   -webkit-appearance: none; appearance: none;
   background: rgba(118,118,128,0.12)
@@ -149,7 +155,7 @@ body { display: flex; flex-direction: column; }
     0 0 0 0.5px rgba(0,0,0,0.05);
   cursor: pointer;
   display: flex;
-  min-height: 90px;
+  min-height: 116px;
   transition:
     transform 0.24s cubic-bezier(0.34,1.56,0.64,1),
     box-shadow 0.24s cubic-bezier(0.4,0,0.2,1);
@@ -183,8 +189,8 @@ body { display: flex; flex-direction: column; }
 .prop-card.active .prop-card-accent { width: 5px; }
 
 .prop-card-body {
-  flex: 1; padding: 10px 12px 10px;
-  display: flex; flex-direction: column; justify-content: space-between;
+  flex: 1; padding: 12px 13px 12px;
+  display: flex; flex-direction: column; gap: 5px;
   min-width: 0;
 }
 .prop-card-top {
@@ -216,25 +222,41 @@ body { display: flex; flex-direction: column; }
   white-space: nowrap;
 }
 .prop-card-name {
-  font-size: 13px; font-weight: 700; color: #1c1c1e;
-  line-height: 1.25; letter-spacing: -0.02em;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 13.5px; font-weight: 700; color: #1c1c1e;
+  line-height: 1.28; letter-spacing: -0.02em;
+  display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; overflow: hidden;
 }
 .prop-card-meta {
-  font-size: 10.5px; color: #8e8e93;
-  display: flex; gap: 0; flex-wrap: nowrap; overflow: hidden;
+  font-size: 10px; color: #8e8e93;
+  display: flex; gap: 0; align-items: center;
+  min-width: 0; overflow: hidden;
 }
-.prop-card-meta-item { white-space: nowrap; }
+/* Type: can shrink, truncates last */
+.prop-card-meta-type {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex-shrink: 1; min-width: 0;
+}
+/* Beds + sqft: never shrink */
+.prop-card-meta-item { white-space: nowrap; flex-shrink: 0; }
 .prop-card-meta-dot {
-  color: rgba(0,0,0,0.2); margin: 0 5px; flex-shrink: 0;
+  color: rgba(0,0,0,0.2); margin: 0 4px; flex-shrink: 0;
 }
+/* Thumb container — fixed width, centers the image block */
 .prop-card-thumb {
-  width: 120px;
-  flex-shrink: 0;
+  width: 126px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px 8px 8px 6px;
   border-radius: 0 14px 14px 0;
+  background: rgba(0,0,0,0.02);
+}
+/* Inner image block — enforces 4:3 aspect ratio */
+.prop-card-thumb-img {
+  width: 100%; aspect-ratio: 4/3;
+  border-radius: 9px;
   background-size: cover;
   background-position: center top;
-  overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* ─── NO RESULTS ──────────────────────────────── */
@@ -376,6 +398,7 @@ body { display: flex; flex-direction: column; }
   background: #fff; border-radius: 16px; overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.05);
   display: flex; height: 196px; margin-bottom: 14px;
+  position: relative;
   transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
   animation: card-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
 }
@@ -438,6 +461,267 @@ body { display: flex; flex-direction: column; }
 }
 #list-no-results.show { display: block; }
 
+/* ─── COMPARE COL SELECTOR ────────────────────── */
+.cmp-col-select {
+  width: 100%;
+  background: rgba(118,118,128,0.08);
+  border: none; border-radius: 16px;
+  padding: 5px 20px 5px 9px;
+  font-size: 10px; font-weight: 500;
+  color: #6e6e73; font-family: inherit;
+  cursor: pointer; margin-bottom: 8px;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23999'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  transition: background-color 0.15s;
+}
+.cmp-col-select:hover { background-color: rgba(118,118,128,0.14); }
+.cmp-col-select:focus { outline: none; }
+
+/* ─── ICON + LABEL in label column ─────────────── */
+.cmp-td-label {
+  text-align: center !important;
+  padding: 10px 4px !important;
+  vertical-align: middle;
+}
+.cmp-label-icon {
+  display: flex; justify-content: center;
+  color: #8e8e93; margin-bottom: 4px;
+}
+.cmp-label-text {
+  font-size: 9px; font-weight: 600; color: #8e8e93;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  text-align: center; white-space: nowrap;
+}
+
+/* ─── COMPARE BUTTON (on card) ────────────────── */
+.cmp-btn {
+  position: absolute; top: 10px; right: 10px;
+  height: 26px; padding: 0 10px 0 8px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.92);
+  border: 1.5px solid rgba(0,0,0,0.12);
+  display: inline-flex; align-items: center; gap: 4px;
+  cursor: pointer; font-size: 11px; font-weight: 600;
+  color: #3c3c43; line-height: 1; white-space: nowrap;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+  z-index: 10; font-family: inherit;
+}
+.cmp-btn .cmp-btn-icon { font-size: 13px; font-weight: 700; }
+.cmp-btn.on { background: #E05A26; border-color: #E05A26; color: #fff; }
+.cmp-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.18); }
+.cmp-btn:active { transform: scale(0.94); }
+
+/* ─── COMPARE BAR (bottom pill) ────────────────── */
+@keyframes cmp-shake {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  25%      { transform: translateX(calc(-50% - 7px)) translateY(0); }
+  75%      { transform: translateX(calc(-50% + 7px)) translateY(0); }
+}
+#compare-bar {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(90px);
+  z-index: 800;
+  background: #1c1c1e; color: #fff;
+  padding: 13px 20px 13px 22px;
+  border-radius: 100px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 8px 36px rgba(0,0,0,0.32);
+  transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer; white-space: nowrap;
+  user-select: none;
+}
+#compare-bar.show { transform: translateX(-50%) translateY(0); }
+#compare-bar-label { font-size: 14px; font-weight: 600; }
+#compare-bar-dots { display: flex; gap: 5px; }
+.cmp-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  transition: background 0.22s ease;
+}
+.cmp-dot.filled { background: #E05A26; }
+#compare-bar-go {
+  background: rgba(255,255,255,0.12);
+  border: none; color: #fff; border-radius: 20px;
+  padding: 5px 13px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.15s;
+}
+#compare-bar-go:hover { background: rgba(255,255,255,0.22); }
+#compare-bar-clear {
+  opacity: 0.45; font-size: 20px; line-height: 1;
+  cursor: pointer; padding: 0 2px;
+  transition: opacity 0.15s;
+}
+#compare-bar-clear:hover { opacity: 0.9; }
+
+/* ─── COMPARE SHEET (iOS modal) ─────────────────── */
+#compare-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.48);
+  z-index: 900;
+  display: none; opacity: 0;
+  transition: opacity 0.3s ease;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+#compare-overlay.show { opacity: 1; }
+#compare-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  z-index: 901;
+  background: #f2f2f7;
+  border-radius: 22px 22px 0 0;
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.44s cubic-bezier(0.34,1.15,0.64,1);
+  box-shadow: 0 -8px 48px rgba(0,0,0,0.22);
+}
+#compare-sheet.show { transform: translateY(0); }
+#compare-handle {
+  display: flex; justify-content: center; padding: 10px 0 2px;
+  flex-shrink: 0;
+}
+#compare-handle-bar {
+  width: 38px; height: 4px; border-radius: 2px;
+  background: rgba(0,0,0,0.16);
+}
+#compare-sheet-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 20px 10px; flex-shrink: 0;
+}
+#compare-sheet-title { font-size: 17px; font-weight: 700; color: #1c1c1e; }
+#compare-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(118,118,128,0.18); border: none;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 14px; color: #3c3c43;
+  transition: background 0.15s; font-family: inherit;
+}
+#compare-close:hover { background: rgba(118,118,128,0.28); }
+#compare-body {
+  flex: 1; overflow-y: auto; overflow-x: auto;
+  padding: 0 16px 40px;
+  -webkit-overflow-scrolling: touch;
+}
+/* ═══ COMPARE TABLE — Apple-style redesign ═══════ */
+.cmp-table {
+  table-layout: fixed; width: 100%;
+  border-collapse: separate; border-spacing: 0;
+}
+
+/* ── Sticky row — only the dropdown selector row sticks ── */
+.cmp-select-row th {
+  position: sticky; top: 0; z-index: 10;
+  background: #f2f2f7;
+  padding: 8px 8px 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+/* ── Image + name row — scrolls away naturally ── */
+.cmp-head-row th {
+  text-align: center; vertical-align: top;
+  padding: 0 8px 16px;
+  background: #f2f2f7;
+}
+.cmp-prop-img {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; border-radius: 12px;
+  display: block; margin-bottom: 10px;
+}
+.cmp-prop-img-ph {
+  width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg,#2c2c2e,#3a3a3c);
+  border-radius: 12px; margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 5px;
+}
+.cmp-prop-img-ph-label {
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cmp-prop-img-ph-dot {
+  display: flex; gap: 4px;
+}
+.cmp-prop-img-ph-dot span {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+.cmp-prop-name {
+  font-size: 13px; font-weight: 700; color: #1c1c1e;
+  line-height: 1.35; text-align: center;
+  min-height: 36px;
+}
+
+/* ── Section header (like Apple "Summary") ──────── */
+.cmp-section-hdr td {
+  padding: 30px 0 0;
+  border-top: 0.5px solid rgba(0,0,0,0.10);
+  text-align: left;
+}
+.cmp-section-hdr:first-child td { border-top: none; padding-top: 12px; }
+.cmp-section-title {
+  font-size: 24px; font-weight: 700; color: #1c1c1e;
+  padding-bottom: 18px;
+  display: block;
+}
+
+/* ── Price hero row (big number, like Apple's 6.9") */
+.cmp-price-row td {
+  text-align: center; padding: 8px 6px 2px;
+}
+.cmp-price-hero {
+  font-size: 34px; font-weight: 800; letter-spacing: -0.04em;
+  color: #1c1c1e; line-height: 1; display: block;
+}
+.cmp-price-row td.best .cmp-price-hero { color: #E05A26; }
+
+/* ── PSF sub-row (small gray below price) ───────── */
+.cmp-psf-row td {
+  text-align: center; padding: 0 6px 24px;
+  font-size: 14px; font-weight: 500; color: #aeaeb2;
+}
+
+/* ── Icon row (large centered icon per column) ───── */
+.cmp-icon-row td {
+  text-align: center; padding: 28px 8px 10px;
+  border-top: 0.5px solid rgba(0,0,0,0.10);
+  color: #aeaeb2;
+}
+.cmp-icon-row td svg { width: 44px; height: 44px; }
+.cmp-icon-lbl {
+  font-size: 10px; font-weight: 600; color: #8e8e93;
+  text-align: center; margin-top: 5px; letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* ── Feature text rows (below icons) ────────────── */
+.cmp-feat-row td {
+  text-align: center; padding: 5px 8px;
+  font-size: 15px; font-weight: 500; color: #1c1c1e;
+  line-height: 1.4;
+}
+.cmp-feat-row td.best { color: #E05A26; font-weight: 700; }
+.cmp-feat-spacer td  { height: 20px; }
+
+/* ── Badges & links ─────────────────────────────── */
+.cmp-badge {
+  display: inline-flex; align-items: center;
+  padding: 5px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+}
+.cmp-badge-green { background: rgba(52,199,89,0.14); color: #1d8f40; }
+.cmp-badge-gray  { background: rgba(118,118,128,0.10); color: #aeaeb2; }
+.cmp-blog-link {
+  display: inline-block; padding: 10px 22px;
+  border-radius: 12px; background: #E05A26; color: #fff !important;
+  text-decoration: none; font-size: 14px; font-weight: 600;
+  transition: background 0.15s;
+}
+.cmp-blog-link:hover { background: #c94c1c; }
+.cmp-blog-pending { font-size: 14px; color: #aeaeb2; }
+
 /* ─── ATTRIBUTION ─────────────────────────────── */
 .leaflet-control-attribution {
   background: rgba(255,255,255,0.70) !important;
@@ -450,26 +734,15 @@ body { display: flex; flex-direction: column; }
 </head>
 <body>
 
-<!-- ── HEADER ── -->
-<div id="header">
-  <div class="logo-mark">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="18" height="18">
-      <g fill="#ffffff">
-        <path d="M323 690 L463 360 Q500 300 537 360 L677 690 L637 690 L510 390 Q500 350 490 390 L363 690 Z"/>
-        <circle cx="500" cy="556" r="26"/>
-        <path d="M488 566 L482 620 L518 620 L512 566 Z"/>
-      </g>
-    </svg>
-  </div>
-  <div class="header-text">
-    <h1>DREAMER PROPERTY LAB</h1>
-    <p>槟城优选房源 · 探房地图</p>
-  </div>
-  <button id="view-toggle" onclick="switchView()">🗺 地图</button>
-</div>
-
 <!-- ── SHARED FILTER BAR ── -->
 <div id="filter-bar">
+      <!-- Home / back button -->
+      <a id="home-btn" href="https://www.dreamerlab.blog/propertylab" target="_top" title="回到 Property Lab">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+
       <select id="f-region" onchange="applyFilters()">
         <option value="">所有区域</option>
         <optgroup label="── 槟城岛 George Town ──">
@@ -572,6 +845,12 @@ body { display: flex; flex-direction: column; }
       </select>
 
       <button class="btn-reset" onclick="resetAll()">重置</button>
+      <button id="view-toggle" onclick="switchView()">
+        <span id="view-toggle-label">Map View</span>
+        <div id="view-toggle-track">
+          <div id="view-toggle-thumb"></div>
+        </div>
+      </button>
 </div>
 
 <!-- ── LIST VIEW (default) ── -->
@@ -616,6 +895,29 @@ body { display: flex; flex-direction: column; }
 
 </div>
 
+<!-- ── COMPARE BAR ── -->
+<div id="compare-bar">
+  <div id="compare-bar-dots">
+    <div class="cmp-dot"></div>
+    <div class="cmp-dot"></div>
+    <div class="cmp-dot"></div>
+  </div>
+  <div id="compare-bar-label">选择项目来对比</div>
+  <button id="compare-bar-go" onclick="event.stopPropagation();openCompareSheet()">对比 →</button>
+  <span id="compare-bar-clear" onclick="event.stopPropagation();clearCompare()" title="清除全部">×</span>
+</div>
+
+<!-- ── COMPARE SHEET ── -->
+<div id="compare-overlay" onclick="closeCompareSheet()"></div>
+<div id="compare-sheet">
+  <div id="compare-handle"><div id="compare-handle-bar"></div></div>
+  <div id="compare-sheet-header">
+    <div id="compare-sheet-title">项目对比</div>
+    <button id="compare-close" onclick="closeCompareSheet()">✕</button>
+  </div>
+  <div id="compare-body"></div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 /* ═══ DATA ═══════════════════════════════════════ */
@@ -626,20 +928,20 @@ const PROPERTIES = [
   { id:3,  name:"The Terraces Condominium",   addr:"Bukit Jambul, Penang",                                 region:"Bukit Jambul",     lat:5.34319,   lng:100.28007,  price:531000,   priceStr:"RM 531,000",   tenure:"Leasehold", type:"Condominiums",        beds:[3],     sqft:"925–950",     completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_37d0c3cb4a504502b9d858c94823a6ca~mv2.png", blog:"https://www.dreamerlab.blog/post/the-terraces-condominium-bukit-jambul" },
   { id:4,  name:"The Skyline",                addr:"Jalan Paya Terubong, Paya Terubong, Penang",           region:"Paya Terubong",    lat:5.36024,   lng:100.27466,  price:199900,   priceStr:"RM 199,900",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"750–1,950",   completion:"2028",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_92f060df3a084d0398111003c70e31b1~mv2.png", blog:"https://www.dreamerlab.blog/post/the-skyline-paya-terubong" },
   { id:5,  name:"Lumina Residence",           addr:"20 Lebuhraya Pykett, George Town, Penang",             region:"George Town",      lat:5.4214279, lng:100.322118,  price:950000,   priceStr:"RM 950,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"1,206–1,518", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_e5125b927f4c4553ae227e9e82c8d8bc~mv2.png", blog:"https://www.dreamerlab.blog/post/lumina-residence-george-town" },
-  { id:6,  name:"Lightwater Residences",      addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3712415, lng:100.317869,  price:2050000,  priceStr:"RM 2,050,000", tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,152–3,466", completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Lightwater+Residences",      blog:"" },
+  { id:6,  name:"Lightwater Residences",      addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3712415, lng:100.317869,  price:2050000,  priceStr:"RM 2,050,000", tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,152–3,466", completion:"2028",       img:"https://img3.penangpropertytalk.com/wp-content/uploads/2024/04/lightwater-residences-1.jpg", blog:"" },
   { id:7,  name:"Double Tree Residence",      addr:"Jalan Merbau, Tanjung Bungah, Penang",                 region:"Tanjung Bungah",   lat:5.461388, lng:100.302822, price:2930000,  priceStr:"RM 2,930,000", tenure:"Freehold",  type:"Semi-detached house", beds:[7,8],   sqft:"5,000+",      completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_eb69b22bd21547878b8f68a9193a557c~mv2.png", blog:"https://www.dreamerlab.blog/post/double-tree-residence-tanjung-bungah" },
   { id:8,  name:"Crown Penang",               addr:"Jalan Seri Tanjung Pinang, Tanjung Tokong, Penang",    region:"Tanjung Tokong",   lat:5.4555119, lng:100.310950,  price:704000,   priceStr:"RM 704,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"614–1,625",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_464a61990c064b02ab9bb6d7980c508f~mv2.png", blog:"https://www.dreamerlab.blog/post/crown-penang" },
   { id:9,  name:"Laguna Bay Residences",      addr:"Solok Teluk Kumbar, Teluk Kumbar, Penang",             region:"Teluk Kumbar",     lat:5.285401,  lng:100.235759,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2026 Q3",  affordable:true,    img:"https://static.wixstatic.com/media/431cfd_e0e4e9cf563e4c75bdc24443c34b61bf~mv2.png", blog:"https://www.dreamerlab.blog/post/laguna-bay-residences-teluk-kumbar" },
-  { id:10, name:"Goodwood Residence",         addr:"Jalan Tun Dr Awang, Bayan Lepas, Penang",              region:"Bayan Lepas",      lat:5.306146,  lng:100.269236,  price:678000,   priceStr:"RM 678,000",   tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,075+",      completion:"Ready",      img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Goodwood+Residence",         blog:"" },
-  { id:11, name:"D'Hazelton",                 addr:"Lebuh Rambai 1, Paya Terubong, Penang",                region:"Paya Terubong",    lat:5.3826416, lng:100.2790332,  price:450000,   priceStr:"RM 450,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"900–1,000",   completion:"2029",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Hazelton",                 blog:"" },
-  { id:12, name:"Tuan Pavilion",              addr:"Solok Zoo 1, Air Itam, Penang",                        region:"Air Itam",         lat:5.3943458, lng:100.2800298,  price:694450,   priceStr:"RM 694,450",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,173–1,592", completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Tuan+Pavilion",              blog:"https://www.dreamerlab.blog/post/tuan-pavilion-air-itam" },
+  { id:10, name:"Goodwood Residence",         addr:"Jalan Tun Dr Awang, Bayan Lepas, Penang",              region:"Bayan Lepas",      lat:5.306146,  lng:100.269236,  price:678000,   priceStr:"RM 678,000",   tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,075+",      completion:"Ready",      img:"https://img1.penangpropertytalk.com/wp-content/uploads/2020/10/goodwood-residence-main.jpg", blog:"" },
+  { id:11, name:"D'Hazelton",                 addr:"Lebuh Rambai 1, Paya Terubong, Penang",                region:"Paya Terubong",    lat:5.3826416, lng:100.2790332,  price:450000,   priceStr:"RM 450,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"900–1,000",   completion:"2029",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_fe1b524900644368951a5aa2f9eed61b~mv2.png", blog:"https://www.dreamerlab.blog/post/d-hazelton-farlim" },
+  { id:12, name:"Tuan Pavilion",              addr:"Solok Zoo 1, Air Itam, Penang",                        region:"Air Itam",         lat:5.3943458, lng:100.2800298,  price:694450,   priceStr:"RM 694,450",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,173–1,592", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_6d721c9fdbcf49d98ea760810c396daa~mv2.png",              blog:"https://www.dreamerlab.blog/post/tuan-pavilion-air-itam" },
   { id:13, name:"G'Vinton",                   addr:"Jalan Sultan Ahmad Shah, George Town, Penang",         region:"George Town",      lat:5.42415,  lng:100.32627,  price:500000,   priceStr:"RM 500,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2],   sqft:"387–1,303",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_308b4652ab334ff0a4aefc6e856bfeaf~mv2.png", blog:"https://www.dreamerlab.blog/post/g-vinton-george-town" },
-  { id:14, name:"The Lighthauz",              addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3755739, lng:100.3175046,  price:890000,   priceStr:"RM 890,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[2,3],   sqft:"732–1,001",   completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=The+Lighthauz",              blog:"" },
-  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Tiara",                    blog:"" },
-  { id:16, name:"London Pavilion",            addr:"Jalan Permatang Damar Laut, Bayan Lepas, Penang",      region:"Bayan Lepas",      lat:5.28777,   lng:100.25648,  price:418000,   priceStr:"RM 418,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"982–1,342",   completion:"2027 Q4",    img:"https://placehold.co/360x164/1c1c1e/ffffff?text=London+Pavilion",            blog:"" },
-  { id:17, name:"Blossom Suites",             addr:"Jalan Tanjung Bungah, Tanjung Bungah, Penang",         region:"Tanjung Bungah",   lat:5.467931, lng:100.276718,price:750000,   priceStr:"RM 750,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"506–2,852",   completion:"2029",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Blossom+Suites",             blog:"" },
+  { id:14, name:"The Lighthauz",              addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3755739, lng:100.3175046,  price:890000,   priceStr:"RM 890,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[2,3],   sqft:"732–1,001",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_1d3fbd9739864df6b748a37bbd88f26d~mv2.png", blog:"https://www.dreamerlab.blog/post/the-lighthauz-gelugor" },
+  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",  affordable:true,       img:"https://img2.penangpropertytalk.com/wp-content/uploads/2024/02/d-tiara-residence.jpeg", blog:"" },
+  { id:16, name:"London Pavilion",            addr:"Jalan Permatang Damar Laut, Bayan Lepas, Penang",      region:"Bayan Lepas",      lat:5.28777,   lng:100.25648,  price:418000,   priceStr:"RM 418,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"982–1,510",   completion:"2027 Q4",  affordable:true,     img:"https://img2.penangpropertytalk.com/wp-content/uploads/2023/12/london-pavilion-1-e1702641833237.jpeg", blog:"" },
+  { id:17, name:"Blossom Suites",             addr:"Jalan Tanjung Bungah, Tanjung Bungah, Penang",         region:"Tanjung Bungah",   lat:5.467931, lng:100.276718,price:750000,   priceStr:"RM 750,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"506–2,852",   completion:"2029",       img:"https://img2.penangpropertytalk.com/wp-content/uploads/2023/04/blossom-suites.jpg",                blog:"" },
   { id:18, name:"Alton Skyvillas",            addr:"Jalan Jelutong, Jelutong, Penang",                     region:"Jelutong",         lat:5.392601,  lng:100.316138,  price:898560,   priceStr:"RM 898,560",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,132–2,672", completion:"2026",       img:"https://static.wixstatic.com/media/431cfd_63dff1f3b25e4a4dac3ddd9b0a87f95d~mv2.png", blog:"https://www.dreamerlab.blog/post/alton-skyvillas-jelutong" },
-  { id:19, name:"TwinStar",                   addr:"Lintang Slim, Jelutong, Penang",                       region:"Jelutong",         lat:5.399509,  lng:100.310904,  price:438000,   priceStr:"RM 438,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2028",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=TwinStar",                    blog:"" },
+  { id:19, name:"TwinStar",                   addr:"Lintang Slim, Jelutong, Penang",                       region:"Jelutong",         lat:5.399509,  lng:100.310904,  price:438000,   priceStr:"RM 438,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2028",  affordable:true,       img:"https://img1.penangpropertytalk.com/wp-content/uploads/2024/05/twinstar.jpg", blog:"" },
   { id:20, name:"Avéa",                       addr:"Andaman Island, Penang",                               region:"Andaman Island",   lat:5.442636,  lng:100.321661,  price:683000,   priceStr:"RM 683,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"678–1,076",   completion:"2030",       img:"https://static.wixstatic.com/media/431cfd_38f3971e636c42a4be6f2a7f626c35c5~mv2.png", blog:"https://www.dreamerlab.blog/post/ave-a-andaman-island" },
   { id:22, name:"Queens Residences Q3",        addr:"Queens Waterfront, Queensbay, Bayan Lepas, Penang",    region:"Queensbay",        lat:5.3348967, lng:100.3107444,  price:958130,   priceStr:"RM 958,130",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"950–1,400",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_f1a178663d154accaf17cbdf9d6f45b8~mv2.png", blog:"https://www.dreamerlab.blog/post/queens-residences-q3-queens-waterfront" },
   { id:23, name:"Pinnacle Bukit Gambier",      addr:"Jalan Bukit Gambir, Gelugor, Penang",                  region:"Gelugor",          lat:5.3668766, lng:100.2959225, price:813800,   priceStr:"RM 813,800",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[3,4],   sqft:"1,077–1,734", completion:"2030 Q1",    img:"https://static.wixstatic.com/media/431cfd_57f31518b0a54989b9c9a4a2fe6e205d~mv2.png", blog:"https://www.dreamerlab.blog/post/pinnacle-bukit-gambier-gelugor" },
@@ -734,6 +1036,10 @@ let suppressListUpdate  = false;  // true while map is flying programmatically
 
 /* ═══ MARKERS ════════════════════════════════════ */
 function renderMarkers(list) {
+  // Close any open popup first — removing a marker with open popup leaves it floating
+  map.closePopup();
+  activeId = null;
+  document.querySelectorAll('.prop-card.active').forEach(el => el.classList.remove('active'));
   Object.values(markerById).forEach(m => m.remove());
   Object.keys(markerById).forEach(k => delete markerById[k]);
 
@@ -773,7 +1079,7 @@ function renderCards(list) {
         </div>
         <div class="prop-card-name">${p.name}</div>
         <div class="prop-card-meta">
-          <span class="prop-card-meta-item">${p.type}</span>
+          <span class="prop-card-meta-type">${p.type}</span>
           <span class="prop-card-meta-dot">·</span>
           <span class="prop-card-meta-item">🛏 ${p.beds.join('/')} 房</span>
           <span class="prop-card-meta-dot">·</span>
@@ -787,7 +1093,7 @@ function renderCards(list) {
           <div class="prop-card-completion">🏗 ${p.completion}</div>
         </div>
       </div>
-      ${hasThumb ? `<div class="prop-card-thumb" style="background-image:url('${p.img}')"></div>` : ''}`;
+      ${hasThumb ? `<div class="prop-card-thumb"><div class="prop-card-thumb-img" style="background-image:url('${p.img}')"></div></div>` : ''}`;
 
     card.addEventListener('click', () => {
       setActive(p.id);
@@ -847,18 +1153,18 @@ function switchView(target) {
   currentView = target || (currentView === 'list' ? 'map' : 'list');
   const listView = document.getElementById('list-view');
   const mapView  = document.getElementById('main');
-  const btn      = document.getElementById('view-toggle');
+  const track    = document.getElementById('view-toggle-track');
 
   if (currentView === 'map') {
     listView.style.display = 'none';
     mapView.style.display  = 'flex';
-    btn.textContent = '📋 列表';
+    track.classList.add('on');
     map.invalidateSize();
     applyFilters();
   } else {
     mapView.style.display  = 'none';
     listView.style.display = 'flex';
-    btn.textContent = '🗺 地图';
+    track.classList.remove('on');
     renderListCards(getSorted(filteredProps));
   }
 }
@@ -908,8 +1214,17 @@ function renderListCards(list) {
     const card = document.createElement('div');
     card.className = 'list-card';
     card.style.animationDelay = `${i * 30}ms`;
+    const _inCmp = compareList.includes(p.id);
     card.innerHTML = `
-      <div class="list-card-img" style="${hasImg ? `background-image:url('${p.img}')` : 'background:#2c2c2e'}"></div>
+      <button class="cmp-btn${_inCmp ? ' on' : ''}"
+        data-id="${p.id}"
+        onclick="event.stopPropagation();toggleCompare(${p.id})">
+        <span class="cmp-btn-icon">${_inCmp ? '✓' : '＋'}</span>
+        <span>${_inCmp ? '已选' : '对比'}</span>
+      </button>
+      <div class="list-card-img" style="${hasImg ? `background-image:url('${p.img}')` : 'background:linear-gradient(135deg,#2c2c2e,#3a3a3c)'}">
+        ${!hasImg ? `<div style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px"><div style="display:flex;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.22)"></span><span style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.22)"></span><span style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.22)"></span></div><span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.38);letter-spacing:0.06em;text-transform:uppercase">图片即将上线</span></div>` : ''}
+      </div>
       <div class="list-card-body">
         <div>
           <div class="list-card-badges">
@@ -1049,9 +1364,330 @@ function resetAll() {
   map.once('moveend', () => { suppressListUpdate = false; onMapMove(); });
 }
 
+/* ═══ COMPARE ════════════════════════════════════ */
+let compareList   = [];   // ordered array of ids (max 3)
+const MAX_COMPARE = 3;
+
+function toggleCompare(id) {
+  const idx = compareList.indexOf(id);
+  if (idx !== -1) {
+    compareList.splice(idx, 1);
+  } else {
+    if (compareList.length >= MAX_COMPARE) {
+      const bar = document.getElementById('compare-bar');
+      bar.style.animation = 'none';
+      void bar.offsetHeight;
+      bar.style.animation = 'cmp-shake 0.4s ease';
+      return;
+    }
+    compareList.push(id);
+  }
+  syncCompareBtns();
+  updateCompareBar();
+}
+
+/* swap column colIdx to a different property */
+function swapCompareCol(colIdx, newId) {
+  newId = parseInt(newId);
+  const existIdx = compareList.indexOf(newId);
+  if (existIdx !== -1 && existIdx !== colIdx) {
+    const old = compareList[colIdx];
+    compareList[existIdx] = old;
+    compareList[colIdx]   = newId;
+  } else {
+    compareList[colIdx] = newId;
+  }
+  syncCompareBtns();
+  buildCompareTable();
+}
+
+function syncCompareBtns() {
+  document.querySelectorAll('.cmp-btn').forEach(btn => {
+    const id = parseInt(btn.dataset.id);
+    const on = compareList.includes(id);
+    btn.classList.toggle('on', on);
+    btn.innerHTML = `<span class="cmp-btn-icon">${on ? '✓' : '＋'}</span><span>${on ? '已选' : '对比'}</span>`;
+  });
+}
+
+function updateCompareBar() {
+  const bar   = document.getElementById('compare-bar');
+  const label = document.getElementById('compare-bar-label');
+  const go    = document.getElementById('compare-bar-go');
+  const dots  = document.querySelectorAll('.cmp-dot');
+  const n     = compareList.length;
+
+  if (n === 0) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  label.textContent = n === 1 ? '再加 1–2 个项目' : `已选 ${n} 个项目`;
+  go.style.display  = n >= 2 ? 'block' : 'none';
+  dots.forEach((dot, i) => dot.classList.toggle('filled', i < n));
+}
+
+function clearCompare() {
+  compareList = [];
+  syncCompareBtns();
+  updateCompareBar();
+}
+
+function openCompareSheet() {
+  if (compareList.length < 2) return;
+  buildCompareTable();
+  const overlay = document.getElementById('compare-overlay');
+  overlay.style.display = 'block';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    overlay.classList.add('show');
+    document.getElementById('compare-sheet').classList.add('show');
+  }));
+}
+
+function closeCompareSheet() {
+  const overlay = document.getElementById('compare-overlay');
+  overlay.classList.remove('show');
+  document.getElementById('compare-sheet').classList.remove('show');
+  setTimeout(() => { overlay.style.display = 'none'; }, 420);
+}
+
+/* ── Title type per property (researched from official sources) ── */
+const PROPERTY_TITLES = {
+   1:'Residential',  // Maldives — confirmed Residential Strata
+   2:'Commercial',   // Scott@Logan — service residence w/ hotel suites
+   3:'Residential',  // Terraces — IJM Land residential condo
+   4:'Residential',  // The Skyline — PLB Homes residential
+   5:'Residential',  // Lumina — BSG Property, confirmed Residential
+   6:'Residential',  // Lightwater — IJM Land, confirmed Residential
+   7:'Residential',  // Double Tree — Individual landed title
+   8:'Residential',  // Crown Penang — confirmed "Title: Residential"
+   9:'Residential',  // Laguna Bay — Kobay, Residential Strata
+  10:'Residential',  // Goodwood — WHH Land, Residential
+  11:'Residential',  // D'Hazelton — GSD Land, confirmed Residential
+  12:'Residential',  // Tuan Pavilion — M Summit, confirmed Residential
+  13:'Commercial',   // G'Vinton — GSD Land, explicitly Commercial Title
+  14:'Commercial',   // Lighthauz — blog confirmed "Commercial Title + HDA保障"
+  15:'Residential',  // D'Tiara — GSD Land, affordable Residential
+  16:'Residential',  // London Pavilion — M Summit, confirmed Residential
+  17:'Commercial',   // Blossom Suites — FAQ confirmed "freehold, commercial title unit"
+  18:'Residential',  // Alton Skyvillas — Airmas, Residential
+  19:'Residential',  // TwinStar — confirmed "Freehold Residential Title"
+  20:'Commercial',   // Avéa — E&O serviced apartments
+  21:'Residential',  // Ayana — Jayamas, affordable Residential
+  22:'Residential',  // Queens Q3 — Ideal, confirmed "Full Residential Title"
+  23:'Commercial',   // Pinnacle Bukit Gambier — Service Residence
+};
+
+/* ── Carpark data (bays per unit, researched from official sources) ── */
+const CARPARKS = {
+   1:'2 bays',      // Maldives — confirmed 2 carparks standard
+   2:'月租停车',     // Scott@Logan — 无固定车位，机械停车按月租用（博文确认）
+   3:'2 bays',      // Terraces — confirmed 2 carparks per unit
+   4:'1 bay',       // The Skyline — affordable, standard 1 bay
+   5:'2–3 bays',    // Lumina — confirmed (lower flr: 2 bays; upper: 3 bays)
+   6:'2–4 bays',    // Lightwater — confirmed (Type A: 2–3, Type B/C/D/E: 3–4)
+   7:'3 bays',      // Double Tree — confirmed 3-car porch (landed)
+   8:'1 bay',       // Crown Penang — confirmed 1 carpark per unit
+   9:'1 bay',       // Laguna Bay — confirmed 1 carpark per unit
+  10:'2–4 bays',    // Goodwood — confirmed (2/3/4 carparks by unit type)
+  11:'2–3 bays',    // D'Hazelton — confirmed 2–3 carparks
+  12:'2–4 bays',    // Tuan Pavilion — confirmed (EV parking included)
+  13:'1 bay',       // G'Vinton — 508 units / 9-level carpark, est. 1 bay
+  14:'2 bays',      // Lighthauz — confirmed (1,378 bays / 671 units ≈ 2)
+  15:'1 bay',       // D'Tiara — affordable housing, 1 bay standard
+  16:'1 bay',       // London Pavilion — confirmed 1 carpark per unit
+  17:'1–2 bays',    // Blossom Suites — 10-level carpark / 412 units
+  18:'3–4 bays',    // Alton Skyvillas — confirmed 3–4 carparks per unit
+  19:'2 bays',      // TwinStar — confirmed 2 side-by-side carparks
+  20:'1–2 bays',    // Avéa — E&O serviced apt, est. 1–2 bays
+  21:'1 bay',       // Ayana — affordable housing, 1 bay standard
+  22:'2–3 bays',    // Queens Q3 — confirmed 2–3 carparks free
+  23:'2–4 bays',    // Pinnacle — confirmed "up to 4 cars" per unit type
+};
+
+/* ── Developer (researched from official sources) ── */
+const DEVELOPERS = {
+   1:'Ideal Property',     2:'Advance Golden',    3:'IJM Land',
+   4:'PLB Land',           5:'BSG Property',       6:'IJM Perennial',
+   7:'Hwa Shern Dev.',     8:'Chin Hin × Ivory',  9:'Kobay Property',
+  10:'WHH Land',          11:'GSD Land',          12:'M Summit Group',
+  13:'GSD Land',          14:'Exsim Waterfront',  15:'GSD Land',
+  16:'M Summit Group',    17:'Kobay Property',    18:'Airmas Group',
+  19:'Tauplene Dev.',     20:'Eastern & Oriental',21:'Jayamas Property',
+  22:'Ideal Property',    23:'Pinnacle Homes',
+};
+
+/* ── Total Units (researched from official sources) ── */
+const TOTAL_UNITS = {
+   1:'1,665 units',  // Ideal — confirmed
+   2:'311 units',    // Scott@Logan — PPT confirmed
+   3:'410 units',    // The Terraces — PPT confirmed (34-storey)
+   4:'290 units',    // The Skyline — PPT confirmed
+   5:'596 units',    // BSG Property — confirmed
+   6:'262 units',    // Lightwater — PPT confirmed (2 towers, private lift)
+   7:'4 units',      // Double Tree — confirmed (4 bungalows)
+   8:'588 units',    // Crown Penang — confirmed
+   9:'342 units',    // Laguna Bay — PPT confirmed
+  10:'260 units',    // Goodwood — confirmed
+  11:'1,670 units',  // D'Hazelton Phase 1 — confirmed
+  12:'280 units',    // Tuan Pavilion — confirmed
+  13:'508 units',    // G'Vinton — confirmed
+  14:'671 units',    // Lighthauz — PPT confirmed
+  15:'230 units',    // D'Tiara — PPT confirmed
+  16:'527 units',    // London Pavilion — confirmed
+  17:'412 units',    // Blossom Suites — confirmed
+  18:'161 units',    // Alton Skyvillas — confirmed
+  19:'586 units',    // TwinStar — PPT confirmed (2 towers total)
+  20:'1,080 units',  // Avéa E&O — confirmed
+  21:'96 units',     // Ayana — confirmed
+  22:'532 units',    // Queens Q3 — confirmed
+  23:'982 units',    // Pinnacle — confirmed
+};
+
+/* ── Row icons (SF Symbols–style SVG strokes) ── */
+const ROW_ICONS = {
+  '区域':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 12 6 12s6-6.75 6-12c0-3.314-2.686-6-6-6z"/><circle cx="12" cy="8" r="2.3"/></svg>`,
+  '类型':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+  '产权':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+  '起价':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none"/></svg>`,
+  'PSF':    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>`,
+  '面积':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`,
+  '房型':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 012-2h16a2 2 0 012 2v8"/><path d="M2 14h20"/><path d="M6 14v-4a2 2 0 012-2h8a2 2 0 012 2v4"/></svg>`,
+  '交楼':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="8.01" y2="15" stroke-width="2.5"/><line x1="12" y1="15" x2="12.01" y2="15" stroke-width="2.5"/></svg>`,
+  '可负担': `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`,
+  '博文':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+  '地契':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  '车位':   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M9 9h3.5a2 2 0 010 4H9V9z"/><path d="M9 13v4"/></svg>`,
+  '发展商': `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/></svg>`,
+  '总单位': `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>`,
+};
+
+function buildCompareTable() {
+  const props    = compareList.map(id => PROPERTIES.find(p => p.id === id));
+  const n        = props.length;
+  const minPrice = Math.min(...props.map(p => p.price));
+  const psfs     = props.map(p => calcPSF(p)).filter(Boolean);
+  const minPSF   = psfs.length ? Math.min(...psfs) : null;
+  const minComp  = Math.min(...props.map(p => completionVal(p.completion)));
+  const titleOf     = p => PROPERTY_TITLES[p.id] || 'Residential';
+  const carparkOf   = p => CARPARKS[p.id] || '—';
+  const developerOf = p => DEVELOPERS[p.id] || '—';
+  const unitsOf     = p => TOTAL_UNITS[p.id] || '—';
+
+  // ── Dropdown selector per column ──
+  function colSelect(i) {
+    const curId = compareList[i];
+    return `<select class="cmp-col-select" onchange="swapCompareCol(${i},this.value)">
+      ${PROPERTIES.map(p => {
+        const inOther = compareList.includes(p.id) && p.id !== curId;
+        return `<option value="${p.id}"${p.id===curId?' selected':''}${inOther?' disabled':''}>${p.name}</option>`;
+      }).join('')}
+    </select>`;
+  }
+
+  const imgOf = p => p.img && !p.img.includes('placehold')
+    ? `<img class="cmp-prop-img" src="${p.img}" alt="${p.name}" loading="lazy">`
+    : `<div class="cmp-prop-img-ph"><div class="cmp-prop-img-ph-dot"><span></span><span></span><span></span></div><div class="cmp-prop-img-ph-label">图片即将上线</div></div>`;
+
+  // ── Row helpers ──
+
+  // Section header (Apple-style "Summary")
+  const sec = title => `<tr class="cmp-section-hdr">
+    <td colspan="${n}"><span class="cmp-section-title">${title}</span></td>
+  </tr>`;
+
+  // Hero price row (34px bold number)
+  const priceRow = () => `<tr class="cmp-price-row">
+    ${props.map(p => {
+      const best = p.price === minPrice;
+      return `<td class="${best?'best':''}"><span class="cmp-price-hero">${p.priceStr}</span></td>`;
+    }).join('')}
+  </tr>`;
+
+  // PSF sub-row (small gray text below price)
+  const psfRow = () => `<tr class="cmp-psf-row">
+    ${props.map(p => {
+      const psf  = psfStr(p);
+      const best = minPSF && calcPSF(p) === minPSF;
+      return `<td class="${best?'best':''}" style="${best?'color:#E05A26;font-weight:600;':''}">${psf || '—'}</td>`;
+    }).join('')}
+  </tr>`;
+
+  // Large icon row (40px icon, spanning section visually)
+  const iconRow = (key, label='') => `<tr class="cmp-icon-row">
+    ${props.map(() => `<td>${ROW_ICONS[key]||''}${label ? `<div class="cmp-icon-lbl">${label}</div>` : ''}</td>`).join('')}
+  </tr>`;
+
+  // Feature text row (15px, optionally mark best column)
+  const featRow = (valFn, bestFn) => `<tr class="cmp-feat-row">
+    ${props.map(p => {
+      const best = bestFn && bestFn(p);
+      return `<td class="${best?'best':''}">${valFn(p)}</td>`;
+    }).join('')}
+  </tr>`;
+
+  // Small spacer
+  const spacer = () => `<tr class="cmp-feat-spacer"><td colspan="${n}"></td></tr>`;
+
+  const html = `<table class="cmp-table">
+    <thead>
+      <tr class="cmp-select-row">
+        ${props.map((p,i) => `<th>${colSelect(i)}</th>`).join('')}
+      </tr>
+      <tr class="cmp-head-row">
+        ${props.map(p => `<th>${imgOf(p)}<div class="cmp-prop-name">${p.name}</div></th>`).join('')}
+      </tr>
+    </thead>
+    <tbody>
+
+      ${sec('总览')}
+      ${priceRow()}
+      ${psfRow()}
+      ${featRow(p => p.region)}
+      ${iconRow('地契')}
+      ${featRow(p => `<span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:20px;background:${titleOf(p)==='Residential'?'rgba(52,199,89,0.13)':'rgba(0,122,255,0.13)'};color:${titleOf(p)==='Residential'?'#1a7f37':'#0055cc'}">${titleOf(p)}</span>`)}
+      ${featRow(p => p.type)}
+      ${featRow(p => p.tenure)}
+      ${iconRow('发展商')}
+      ${featRow(p => developerOf(p))}
+      ${iconRow('总单位')}
+      ${featRow(p => unitsOf(p))}
+      ${spacer()}
+
+      ${iconRow('面积')}
+      ${featRow(p => `${p.sqft} sqft`)}
+      ${featRow(p => `${p.beds.join('/')} 房`)}
+      ${spacer()}
+
+      ${iconRow('车位')}
+      ${featRow(p => carparkOf(p))}
+      ${spacer()}
+
+      ${iconRow('交楼')}
+      ${featRow(p => p.completion, p => completionVal(p.completion) === minComp)}
+      ${spacer()}
+
+      ${iconRow('可负担', '槟州可负担计划')}
+      ${featRow(p => p.affordable
+        ? `<span class="cmp-badge cmp-badge-green">✓ 首购族可申请</span>`
+        : `<span class="cmp-badge cmp-badge-gray">开放市场买卖</span>`
+      )}
+      ${spacer()}
+
+      ${iconRow('博文')}
+      ${featRow(p => p.blog
+        ? `<a class="cmp-blog-link" href="${p.blog}" target="_blank">查看博文 ↗</a>`
+        : `<span class="cmp-blog-pending">即将上线</span>`
+      )}
+
+    </tbody>
+  </table>`;
+
+  document.getElementById('compare-body').innerHTML = html;
+}
+
 /* ═══ INIT ═══════════════════════════════════════ */
 renderMarkers(PROPERTIES);
 renderListCards(getSorted(PROPERTIES)); // default list view
+// hide compare-bar go button initially
+document.getElementById('compare-bar-go').style.display = 'none';
 </script>
 </body>
 </html>
