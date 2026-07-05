@@ -749,11 +749,10 @@ body { display: flex; flex-direction: column; }
           <option value="George Town">George Town</option>
           <option value="Gurney Drive">Gurney Drive</option>
           <option value="Pulau Tikus">Pulau Tikus</option>
-          <option value="Gurney Bay">Gurney Bay</option>
         </optgroup>
         <optgroup label="── 槟城岛 Tanjung Tokong ──">
           <option value="Tanjung Tokong">Tanjung Tokong</option>
-
+          <option value="Andaman Island">Andaman Island</option>
         </optgroup>
         <optgroup label="── 槟城岛 Tanjung Bungah ──">
           <option value="Tanjung Bungah">Tanjung Bungah</option>
@@ -763,9 +762,6 @@ body { display: flex; flex-direction: column; }
         </optgroup>
         <optgroup label="── 槟城岛 Teluk Bahang ──">
           <option value="Teluk Bahang">Teluk Bahang</option>
-        </optgroup>
-        <optgroup label="── 槟城岛 Andaman Island ──">
-          <option value="Andaman Island">Andaman Island</option>
         </optgroup>
         <optgroup label="── 槟城岛 Air Itam ──">
           <option value="Air Itam">Air Itam</option>
@@ -788,8 +784,8 @@ body { display: flex; flex-direction: column; }
           <option value="Bukit Jambul">Bukit Jambul</option>
           <option value="Teluk Kumbar">Teluk Kumbar</option>
         </optgroup>
-        <optgroup label="── 槟城岛 Batu Muang ──">
-          <option value="Batu Muang">Batu Muang</option>
+        <optgroup label="── 槟城岛 Batu Maung ──">
+          <option value="Batu Maung">Batu Maung</option>
         </optgroup>
         <optgroup label="── 槟城岛 Balik Pulau ──">
           <option value="Balik Pulau">Balik Pulau</option>
@@ -800,16 +796,22 @@ body { display: flex; flex-direction: column; }
           <option value="Raja Uda">Raja Uda</option>
           <option value="Kepala Batas">Kepala Batas</option>
           <option value="Tasek Gelugor">Tasek Gelugor</option>
+          <option value="Teluk Air Tawar">Teluk Air Tawar</option>
+          <option value="Penaga">Penaga</option>
+          <option value="Bertam">Bertam</option>
         </optgroup>
         <optgroup label="── 大陆 中区 ──">
           <option value="Bukit Mertajam">Bukit Mertajam</option>
           <option value="Bukit Minyak">Bukit Minyak</option>
+          <option value="Bukit Tengah">Bukit Tengah</option>
           <option value="Juru">Juru</option>
+          <option value="Machang Bubok">Machang Bubok</option>
         </optgroup>
         <optgroup label="── 大陆 南区 ──">
           <option value="Simpang Ampat">Simpang Ampat</option>
           <option value="Batu Kawan">Batu Kawan</option>
           <option value="Nibong Tebal">Nibong Tebal</option>
+          <option value="Sungai Jawi">Sungai Jawi</option>
         </optgroup>
       </select>
 
@@ -821,6 +823,7 @@ body { display: flex; flex-direction: column; }
         <option value="Bungalow">Bungalow</option>
         <option value="Terrace house">Terrace</option>
         <option value="Semi-detached house">Semi-D</option>
+        <option value="Shop Office">Shop Office</option>
       </select>
 
       <select id="f-price" onchange="applyFilters()">
@@ -928,17 +931,17 @@ const PROPERTIES = [
   { id:3,  name:"The Terraces Condominium",   addr:"Bukit Jambul, Penang",                                 region:"Bukit Jambul",     lat:5.34319,   lng:100.28007,  price:531000,   priceStr:"RM 531,000",   tenure:"Leasehold", type:"Condominiums",        beds:[3],     sqft:"925–950",     completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_37d0c3cb4a504502b9d858c94823a6ca~mv2.png", blog:"https://www.dreamerlab.blog/post/the-terraces-condominium-bukit-jambul" },
   { id:4,  name:"The Skyline",                addr:"Jalan Paya Terubong, Paya Terubong, Penang",           region:"Paya Terubong",    lat:5.36024,   lng:100.27466,  price:199900,   priceStr:"RM 199,900",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"750–1,950",   completion:"2028",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_92f060df3a084d0398111003c70e31b1~mv2.png", blog:"https://www.dreamerlab.blog/post/the-skyline-paya-terubong" },
   { id:5,  name:"Lumina Residence",           addr:"20 Lebuhraya Pykett, George Town, Penang",             region:"George Town",      lat:5.4214279, lng:100.322118,  price:950000,   priceStr:"RM 950,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"1,206–1,518", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_e5125b927f4c4553ae227e9e82c8d8bc~mv2.png", blog:"https://www.dreamerlab.blog/post/lumina-residence-george-town" },
-  { id:6,  name:"Lightwater Residences",      addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3712415, lng:100.317869,  price:2050000,  priceStr:"RM 2,050,000", tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,152–3,466", completion:"2028",       img:"https://img3.penangpropertytalk.com/wp-content/uploads/2024/04/lightwater-residences-1.jpg", blog:"" },
+  { id:6,  name:"Lightwater Residences",      addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3712415, lng:100.317869,  price:2050000,  priceStr:"RM 2,050,000", tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,152–3,466", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_95e60f5f5ef640439ada25040d1dd272~mv2.png", blog:"https://www.dreamerlab.blog/post/lightwater-residences" },
   { id:7,  name:"Double Tree Residence",      addr:"Jalan Merbau, Tanjung Bungah, Penang",                 region:"Tanjung Bungah",   lat:5.461388, lng:100.302822, price:2930000,  priceStr:"RM 2,930,000", tenure:"Freehold",  type:"Semi-detached house", beds:[7,8],   sqft:"5,000+",      completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_eb69b22bd21547878b8f68a9193a557c~mv2.png", blog:"https://www.dreamerlab.blog/post/double-tree-residence-tanjung-bungah" },
   { id:8,  name:"Crown Penang",               addr:"Jalan Seri Tanjung Pinang, Tanjung Tokong, Penang",    region:"Tanjung Tokong",   lat:5.4555119, lng:100.310950,  price:704000,   priceStr:"RM 704,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"614–1,625",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_464a61990c064b02ab9bb6d7980c508f~mv2.png", blog:"https://www.dreamerlab.blog/post/crown-penang" },
   { id:9,  name:"Laguna Bay Residences",      addr:"Solok Teluk Kumbar, Teluk Kumbar, Penang",             region:"Teluk Kumbar",     lat:5.285401,  lng:100.235759,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2026 Q3",  affordable:true,    img:"https://static.wixstatic.com/media/431cfd_e0e4e9cf563e4c75bdc24443c34b61bf~mv2.png", blog:"https://www.dreamerlab.blog/post/laguna-bay-residences-teluk-kumbar" },
-  { id:10, name:"Goodwood Residence",         addr:"Jalan Tun Dr Awang, Bayan Lepas, Penang",              region:"Bayan Lepas",      lat:5.306146,  lng:100.269236,  price:678000,   priceStr:"RM 678,000",   tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,075+",      completion:"Ready",      img:"https://img1.penangpropertytalk.com/wp-content/uploads/2020/10/goodwood-residence-main.jpg", blog:"" },
+  { id:10, name:"Goodwood Residence",         addr:"Jalan Tun Dr Awang, Bayan Lepas, Penang",              region:"Bayan Lepas",      lat:5.306146,  lng:100.269236,  price:678000,   priceStr:"RM 678,000",   tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,075+",      completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_199234a7f0564394be955e409c625dcc~mv2.png", blog:"https://www.dreamerlab.blog/post/goodwood-residence-bayan-lepas" },
   { id:11, name:"D'Hazelton",                 addr:"Lebuh Rambai 1, Paya Terubong, Penang",                region:"Paya Terubong",    lat:5.3826416, lng:100.2790332,  price:450000,   priceStr:"RM 450,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"900–1,000",   completion:"2029",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_fe1b524900644368951a5aa2f9eed61b~mv2.png", blog:"https://www.dreamerlab.blog/post/d-hazelton-farlim" },
   { id:12, name:"Tuan Pavilion",              addr:"Solok Zoo 1, Air Itam, Penang",                        region:"Air Itam",         lat:5.3943458, lng:100.2800298,  price:694450,   priceStr:"RM 694,450",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,173–1,592", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_6d721c9fdbcf49d98ea760810c396daa~mv2.png",              blog:"https://www.dreamerlab.blog/post/tuan-pavilion-air-itam" },
   { id:13, name:"G'Vinton",                   addr:"Jalan Sultan Ahmad Shah, George Town, Penang",         region:"George Town",      lat:5.42415,  lng:100.32627,  price:500000,   priceStr:"RM 500,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2],   sqft:"387–1,303",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_308b4652ab334ff0a4aefc6e856bfeaf~mv2.png", blog:"https://www.dreamerlab.blog/post/g-vinton-george-town" },
   { id:14, name:"The Lighthauz",              addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3755739, lng:100.3175046,  price:890000,   priceStr:"RM 890,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[2,3],   sqft:"732–1,001",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_1d3fbd9739864df6b748a37bbd88f26d~mv2.png", blog:"https://www.dreamerlab.blog/post/the-lighthauz-gelugor" },
-  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",  affordable:true,       img:"https://img2.penangpropertytalk.com/wp-content/uploads/2024/02/d-tiara-residence.jpeg", blog:"" },
-  { id:16, name:"London Pavilion",            addr:"Jalan Permatang Damar Laut, Bayan Lepas, Penang",      region:"Bayan Lepas",      lat:5.28777,   lng:100.25648,  price:418000,   priceStr:"RM 418,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"982–1,510",   completion:"2027 Q4",  affordable:true,     img:"https://img2.penangpropertytalk.com/wp-content/uploads/2023/12/london-pavilion-1-e1702641833237.jpeg", blog:"" },
+  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_f6d1dbe16faf4d8facf108fba2eec4b8~mv2.png", blog:"https://www.dreamerlab.blog/post/d-tiara-residence-teluk-kumbar" },
+  { id:16, name:"London Pavilion",            addr:"Jalan Permatang Damar Laut, Bayan Lepas, Penang",      region:"Bayan Lepas",      lat:5.28777,   lng:100.25648,  price:418000,   priceStr:"RM 418,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"982–1,510",   completion:"2027 Q4",  affordable:true,     img:"https://static.wixstatic.com/media/431cfd_bdc2e7b45ea04630b55453c6b2f8802a~mv2.png", blog:"https://www.dreamerlab.blog/post/london-pavilion-bayan-lepas" },
   { id:17, name:"Blossom Suites",             addr:"Jalan Tanjung Bungah, Tanjung Bungah, Penang",         region:"Tanjung Bungah",   lat:5.467931, lng:100.276718,price:750000,   priceStr:"RM 750,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"506–2,852",   completion:"2029",       img:"https://img2.penangpropertytalk.com/wp-content/uploads/2023/04/blossom-suites.jpg",                blog:"" },
   { id:18, name:"Alton Skyvillas",            addr:"Jalan Jelutong, Jelutong, Penang",                     region:"Jelutong",         lat:5.392601,  lng:100.316138,  price:898560,   priceStr:"RM 898,560",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,132–2,672", completion:"2026",       img:"https://static.wixstatic.com/media/431cfd_63dff1f3b25e4a4dac3ddd9b0a87f95d~mv2.png", blog:"https://www.dreamerlab.blog/post/alton-skyvillas-jelutong" },
   { id:19, name:"TwinStar",                   addr:"Lintang Slim, Jelutong, Penang",                       region:"Jelutong",         lat:5.399509,  lng:100.310904,  price:438000,   priceStr:"RM 438,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2028",  affordable:true,       img:"https://img1.penangpropertytalk.com/wp-content/uploads/2024/05/twinstar.jpg", blog:"" },
@@ -946,12 +949,13 @@ const PROPERTIES = [
   { id:22, name:"Queens Residences Q3",        addr:"Queens Waterfront, Queensbay, Bayan Lepas, Penang",    region:"Queensbay",        lat:5.3348967, lng:100.3107444,  price:958130,   priceStr:"RM 958,130",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"950–1,400",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_f1a178663d154accaf17cbdf9d6f45b8~mv2.png", blog:"https://www.dreamerlab.blog/post/queens-residences-q3-queens-waterfront" },
   { id:23, name:"Pinnacle Bukit Gambier",      addr:"Jalan Bukit Gambir, Gelugor, Penang",                  region:"Gelugor",          lat:5.3668766, lng:100.2959225, price:813800,   priceStr:"RM 813,800",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[3,4],   sqft:"1,077–1,734", completion:"2030 Q1",    img:"https://static.wixstatic.com/media/431cfd_57f31518b0a54989b9c9a4a2fe6e205d~mv2.png", blog:"https://www.dreamerlab.blog/post/pinnacle-bukit-gambier-gelugor" },
   // ── 大陆 ──
-  { id:21, name:"Ayana Residence",            addr:"Lorong Seri Tawar 1, Butterworth, Penang",             region:"Butterworth",      lat:5.4801442, lng:100.3850663,  price:335000,   priceStr:"RM 335,000",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"850–900",     completion:"Ready",  affordable:true,      img:"https://static.wixstatic.com/media/431cfd_b26fcff783f846ec8ddb36f7df86b4b8~mv2.png", blog:"https://www.dreamerlab.blog/post/ayana-residence-jayamas" }
+  { id:21, name:"Ayana Residence",            addr:"Lorong Seri Tawar 1, Butterworth, Penang",             region:"Butterworth",      lat:5.4801442, lng:100.3850663,  price:335000,   priceStr:"RM 335,000",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"850–900",     completion:"Ready",  affordable:true,      img:"https://static.wixstatic.com/media/431cfd_b26fcff783f846ec8ddb36f7df86b4b8~mv2.png", blog:"https://www.dreamerlab.blog/post/ayana-residence-jayamas" },
+  { id:24, name:"D'Aleena",                   addr:"Jalan Kubang Menerong, Taman Perda Permai, Tasek Gelugor, Penang", region:"Tasek Gelugor", lat:5.505627,  lng:100.493696,  price:562000,   priceStr:"RM 562,000",   tenure:"Freehold",  type:"Shop Office",         beds:[],      sqft:"1,200",       completion:"2028",           img:"https://static.wixstatic.com/media/431cfd_3ff40c7ab4a649dba2437be173401cae~mv2.png", blog:"https://www.dreamerlab.blog/post/d-aleena-taman-perda-permai" }
 ];
 
 const ZONE_HOODS = {
   "Tanjung Bungah":  ["Tanjung Bungah"],
-  "Tanjung Tokong":  ["Tanjung Tokong","Seri Tanjung Pinang"],
+  "Tanjung Tokong":  ["Tanjung Tokong","Seri Tanjung Pinang","Andaman Island"],
   "Batu Ferringhi":  ["Batu Ferringhi"],
   "Teluk Bahang":    ["Teluk Bahang"],
   "Andaman Island":  ["Andaman Island"],
@@ -960,7 +964,7 @@ const ZONE_HOODS = {
   "Jelutong":        ["Jelutong"],
   "Gelugor":         ["Gelugor","Batu Uban"],
   "Bayan Lepas":     ["Bayan Lepas","Bayan Baru","Queensbay","Sungai Ara","Relau","Bukit Jambul","Teluk Kumbar"],
-  "Batu Muang":      ["Batu Muang","Batu Maung"],
+  "Batu Maung":      ["Batu Maung","Batu Muang"],
   "Balik Pulau":     ["Balik Pulau"],
   "北区": ["Butterworth","Perai","Raja Uda","Kepala Batas","Tasek Gelugor","Teluk Air Tawar","Penaga","Bertam"],
   "中区": ["Bukit Mertajam","Bukit Minyak","Bukit Tengah","Juru","Machang Bubok"],
@@ -1020,7 +1024,7 @@ function popupHTML(p) {
         ${p.affordable ? `<span class="pop-tag" style="background:#34C759;color:#fff;font-weight:600;">Affordable</span>` : ''}
       </div>
       <div class="pop-meta">
-        <span>🛏 ${p.beds.join('/')} 房</span>
+        ${p.beds.length ? `<span>🛏 ${p.beds.join('/')} 房</span>` : `<span>🏢 商业用途</span>`}
         <span>📐 ${p.sqft} sqft</span>
       </div>
       ${p.blog ? `<a class="pop-link" href="${p.blog}" target="_blank" rel="noopener">查看探房文章 →</a>` : '<span class="pop-link-pending">探房文章 即将发布</span>'}
@@ -1080,8 +1084,7 @@ function renderCards(list) {
         <div class="prop-card-name">${p.name}</div>
         <div class="prop-card-meta">
           <span class="prop-card-meta-type">${p.type}</span>
-          <span class="prop-card-meta-dot">·</span>
-          <span class="prop-card-meta-item">🛏 ${p.beds.join('/')} 房</span>
+          ${p.beds.length ? `<span class="prop-card-meta-dot">·</span><span class="prop-card-meta-item">🛏 ${p.beds.join('/')} 房</span>` : ''}
           <span class="prop-card-meta-dot">·</span>
           <span class="prop-card-meta-item">${p.sqft} sqft</span>
         </div>
@@ -1236,8 +1239,7 @@ function renderListCards(list) {
           <div class="list-card-meta">
             <span>${p.type}</span>
             <span class="list-card-meta-dot">·</span>
-            <span>🛏 ${p.beds.join('/')} 房</span>
-            <span class="list-card-meta-dot">·</span>
+            ${p.beds.length ? `<span>🛏 ${p.beds.join('/')} 房</span><span class="list-card-meta-dot">·</span>` : ''}
             <span>${p.sqft} sqft</span>
           </div>
           <div class="list-card-completion">🏗 ${p.completion}</div>
@@ -1473,6 +1475,7 @@ const PROPERTY_TITLES = {
   21:'Residential',  // Ayana — Jayamas, affordable Residential
   22:'Residential',  // Queens Q3 — Ideal, confirmed "Full Residential Title"
   23:'Commercial',   // Pinnacle Bukit Gambier — Service Residence
+  24:'Commercial',   // D'Aleena — Shop Office, commercial title
 };
 
 /* ── Carpark data (bays per unit, researched from official sources) ── */
@@ -1500,6 +1503,7 @@ const CARPARKS = {
   21:'1 bay',       // Ayana — affordable housing, 1 bay standard
   22:'2–3 bays',    // Queens Q3 — confirmed 2–3 carparks free
   23:'2–4 bays',    // Pinnacle — confirmed "up to 4 cars" per unit type
+  24:'1 bay',       // D'Aleena shop office — standard 1 bay per lot
 };
 
 /* ── Developer (researched from official sources) ── */
@@ -1512,6 +1516,7 @@ const DEVELOPERS = {
   16:'M Summit Group',    17:'Kobay Property',    18:'Airmas Group',
   19:'Tauplene Dev.',     20:'Eastern & Oriental',21:'Jayamas Property',
   22:'Ideal Property',    23:'Pinnacle Homes',
+  24:'Maple Meadow / GSD Land',
 };
 
 /* ── Total Units (researched from official sources) ── */
@@ -1539,6 +1544,7 @@ const TOTAL_UNITS = {
   21:'96 units',     // Ayana — confirmed
   22:'532 units',    // Queens Q3 — confirmed
   23:'982 units',    // Pinnacle — confirmed
+  24:'94 lots',      // D'Aleena shop office phase — confirmed
 };
 
 /* ── Row icons (SF Symbols–style SVG strokes) ── */
@@ -1653,7 +1659,7 @@ function buildCompareTable() {
 
       ${iconRow('面积')}
       ${featRow(p => `${p.sqft} sqft`)}
-      ${featRow(p => `${p.beds.join('/')} 房`)}
+      ${featRow(p => p.beds.length ? `${p.beds.join('/')} 房` : '商业用途')}
       ${spacer()}
 
       ${iconRow('车位')}
