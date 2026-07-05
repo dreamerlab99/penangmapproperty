@@ -54,19 +54,33 @@ body { display: flex; flex-direction: column; }
   z-index: 100;
 }
 
-/* ─── FILTERS ─────────────────────────────────── */
-#filters {
+/* ─── VIEW TOGGLE ─────────────────────────────── */
+#view-toggle {
+  margin-left: auto; flex-shrink: 0;
+  background: #111; color: #fff; border: none;
+  border-radius: 10px; padding: 7px 16px;
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  font-family: inherit; letter-spacing: 0.01em;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+#view-toggle:hover { background: #333; }
+
+/* ─── SHARED FILTER BAR ───────────────────────── */
+#filter-bar {
   flex-shrink: 0;
-  background: rgba(255,255,255,0.90);
+  background: rgba(255,255,255,0.92);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 0.5px solid rgba(0,0,0,0.06);
-  padding: 10px 14px;
+  padding: 10px 16px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr) auto;
   gap: 7px;
+  align-items: center;
 }
-#filters select {
+#filter-bar select {
   -webkit-appearance: none; appearance: none;
   background: rgba(118,118,128,0.12)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E")
@@ -78,9 +92,9 @@ body { display: flex; flex-direction: column; }
   transition: background 0.2s cubic-bezier(0.4,0,0.2,1);
   font-family: inherit;
 }
-#filters select:hover  { background-color: rgba(118,118,128,0.20); }
-#filters select:focus  { outline: none; background-color: rgba(118,118,128,0.18); }
-#filters select:active { background-color: rgba(118,118,128,0.28); }
+#filter-bar select:hover  { background-color: rgba(118,118,128,0.20); }
+#filter-bar select:focus  { outline: none; background-color: rgba(118,118,128,0.18); }
+#filter-bar select:active { background-color: rgba(118,118,128,0.28); }
 
 .btn-reset {
   background: #E05A26; border: none; border-radius: 10px;
@@ -180,6 +194,12 @@ body { display: flex; flex-direction: column; }
   font-size: 9px; font-weight: 700; color: #E05A26;
   letter-spacing: 0.11em; text-transform: uppercase;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.badge-affordable {
+  font-size: 8px; font-weight: 700; color: #fff;
+  background: #34C759; border-radius: 4px;
+  padding: 1px 5px; white-space: nowrap; flex-shrink: 0;
+  line-height: 1.5; letter-spacing: 0.03em;
 }
 .prop-card-tenure-badge {
   font-size: 8px; font-weight: 600; color: #6e6e73;
@@ -336,6 +356,88 @@ body { display: flex; flex-direction: column; }
 .leaflet-control-zoom-in { border-bottom: 0.5px solid rgba(0,0,0,0.07) !important; }
 .leaflet-bar { border: none !important; }
 
+/* ─── LIST VIEW ───────────────────────────────── */
+#list-view {
+  flex: 1; overflow-y: auto;
+  background: #f2f2f7;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  -webkit-overflow-scrolling: touch;
+}
+#list-container {
+  width: 100%; max-width: 860px;
+}
+#list-count {
+  font-size: 12px; font-weight: 600; color: #3c3c43;
+  margin-bottom: 14px; padding: 0 2px; letter-spacing: 0.01em;
+}
+.list-card {
+  background: #fff; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.05);
+  display: flex; height: 196px; margin-bottom: 14px;
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
+  animation: card-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.list-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(0,0,0,0.05);
+}
+.list-card-img {
+  width: 270px; flex-shrink: 0;
+  background-size: cover; background-position: center top;
+  background-color: #2c2c2e;
+}
+.list-card-body {
+  flex: 1; padding: 16px 22px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-width: 0;
+}
+.list-card-badges { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
+.list-card-region {
+  font-size: 10px; font-weight: 700; color: #E05A26;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.list-card-tenure {
+  font-size: 9px; font-weight: 600; color: #6e6e73;
+  border: 0.5px solid rgba(0,0,0,0.18); border-radius: 4px; padding: 1px 5px;
+}
+.list-card-name {
+  font-size: 20px; font-weight: 700; color: #1c1c1e;
+  letter-spacing: -0.02em; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.list-card-meta {
+  font-size: 12px; color: #8e8e93; margin-top: 5px;
+  display: flex; gap: 0; flex-wrap: nowrap;
+}
+.list-card-meta-dot { color: rgba(0,0,0,0.2); margin: 0 6px; }
+.list-card-completion { font-size: 11px; color: #aeaeb2; margin-top: 4px; }
+.list-card-price {
+  font-size: 22px; font-weight: 700; color: #1c1c1e; letter-spacing: -0.03em;
+}
+.list-card-price-label { font-size: 11px; color: #aeaeb2; margin-left: 3px; }
+.list-card-actions { display: flex; gap: 8px; margin-top: 10px; }
+.list-btn {
+  padding: 8px 16px; border-radius: 10px; border: none;
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all 0.18s ease;
+  text-decoration: none; display: inline-flex; align-items: center; line-height: 1;
+}
+.list-btn-blog {
+  background: #E05A26; color: #fff !important;
+  box-shadow: 0 2px 8px rgba(224,90,38,0.28);
+}
+.list-btn-blog:hover { background: #c94c1c; transform: translateY(-1px); }
+.list-btn-map {
+  background: rgba(118,118,128,0.12); color: #1c1c1e;
+}
+.list-btn-map:hover { background: rgba(118,118,128,0.22); }
+#list-no-results {
+  text-align: center; padding: 60px 20px; display: none;
+}
+#list-no-results.show { display: block; }
+
 /* ─── ATTRIBUTION ─────────────────────────────── */
 .leaflet-control-attribution {
   background: rgba(255,255,255,0.70) !important;
@@ -363,15 +465,11 @@ body { display: flex; flex-direction: column; }
     <h1>DREAMER PROPERTY LAB</h1>
     <p>槟城优选房源 · 探房地图</p>
   </div>
+  <button id="view-toggle" onclick="switchView()">🗺 地图</button>
 </div>
 
-<div id="main">
-
-  <!-- ── SIDEBAR ── -->
-  <div id="sidebar">
-
-    <!-- Filters -->
-    <div id="filters">
+<!-- ── SHARED FILTER BAR ── -->
+<div id="filter-bar">
       <select id="f-region" onchange="applyFilters()">
         <option value="">所有区域</option>
         <optgroup label="── 槟城岛 George Town ──">
@@ -474,7 +572,26 @@ body { display: flex; flex-direction: column; }
       </select>
 
       <button class="btn-reset" onclick="resetAll()">重置</button>
+</div>
+
+<!-- ── LIST VIEW (default) ── -->
+<div id="list-view">
+  <div id="list-container">
+    <div id="list-count"></div>
+    <div id="list-cards"></div>
+    <div id="list-no-results">
+      <div class="nr-icon">🏘</div>
+      <div class="nr-title">此区域暂无合作房源</div>
+      <div class="nr-sub">更多项目陆续上线 · 敬请期待</div>
     </div>
+  </div>
+</div>
+
+<!-- ── MAP VIEW ── -->
+<div id="main" style="display:none">
+
+  <!-- ── SIDEBAR ── -->
+  <div id="sidebar">
 
     <!-- List header -->
     <div id="list-header">
@@ -504,30 +621,30 @@ body { display: flex; flex-direction: column; }
 /* ═══ DATA ═══════════════════════════════════════ */
 const PROPERTIES = [
   // ── 槟城岛 ──
-  { id:1,  name:"Maldives Residences",        addr:"Jalan Sungai Tiram 6, Bayan Lepas, Penang",           region:"Bayan Lepas",      lat:5.3055739, lng:100.2722344,  price:498000,   priceStr:"RM 498,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"850–930",     completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_00fc43d4aab44a50b0264354889e2608~mv2.png",        blog:"https://www.dreamerlab.blog/post/maldives-residences-bayan-lepas" },
+  { id:1,  name:"Maldives Residences",        addr:"Jalan Sungai Tiram 6, Bayan Lepas, Penang",           region:"Bayan Lepas",      lat:5.3055739, lng:100.2722344,  price:498000,   priceStr:"RM 498,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"850–930",     completion:"2027",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_00fc43d4aab44a50b0264354889e2608~mv2.png",        blog:"https://www.dreamerlab.blog/post/maldives-residences-bayan-lepas" },
   { id:2,  name:"Scott @ Logan",              addr:"Jalan Logan, George Town, Penang",                     region:"George Town",      lat:5.41998,   lng:100.319029,  price:435900,   priceStr:"RM 435,900",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2],   sqft:"338–1,296",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_27d04f200d7e4bf9a347afeff89c80c6~mv2.png", blog:"https://www.dreamerlab.blog/post/scott-logan" },
   { id:3,  name:"The Terraces Condominium",   addr:"Bukit Jambul, Penang",                                 region:"Bukit Jambul",     lat:5.34319,   lng:100.28007,  price:531000,   priceStr:"RM 531,000",   tenure:"Leasehold", type:"Condominiums",        beds:[3],     sqft:"925–950",     completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_37d0c3cb4a504502b9d858c94823a6ca~mv2.png", blog:"https://www.dreamerlab.blog/post/the-terraces-condominium-bukit-jambul" },
-  { id:4,  name:"The Skyline",                addr:"Jalan Paya Terubong, Paya Terubong, Penang",           region:"Paya Terubong",    lat:5.36024,   lng:100.27466,  price:199900,   priceStr:"RM 199,900",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"750–1,950",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_92f060df3a084d0398111003c70e31b1~mv2.png", blog:"https://www.dreamerlab.blog/post/the-skyline-paya-terubong" },
+  { id:4,  name:"The Skyline",                addr:"Jalan Paya Terubong, Paya Terubong, Penang",           region:"Paya Terubong",    lat:5.36024,   lng:100.27466,  price:199900,   priceStr:"RM 199,900",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"750–1,950",   completion:"2028",  affordable:true,       img:"https://static.wixstatic.com/media/431cfd_92f060df3a084d0398111003c70e31b1~mv2.png", blog:"https://www.dreamerlab.blog/post/the-skyline-paya-terubong" },
   { id:5,  name:"Lumina Residence",           addr:"20 Lebuhraya Pykett, George Town, Penang",             region:"George Town",      lat:5.4214279, lng:100.322118,  price:950000,   priceStr:"RM 950,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"1,206–1,518", completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_e5125b927f4c4553ae227e9e82c8d8bc~mv2.png", blog:"https://www.dreamerlab.blog/post/lumina-residence-george-town" },
   { id:6,  name:"Lightwater Residences",      addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3712415, lng:100.317869,  price:2050000,  priceStr:"RM 2,050,000", tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,152–3,466", completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Lightwater+Residences",      blog:"" },
   { id:7,  name:"Double Tree Residence",      addr:"Jalan Merbau, Tanjung Bungah, Penang",                 region:"Tanjung Bungah",   lat:5.461388, lng:100.302822, price:2930000,  priceStr:"RM 2,930,000", tenure:"Freehold",  type:"Semi-detached house", beds:[7,8],   sqft:"5,000+",      completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_eb69b22bd21547878b8f68a9193a557c~mv2.png", blog:"https://www.dreamerlab.blog/post/double-tree-residence-tanjung-bungah" },
   { id:8,  name:"Crown Penang",               addr:"Jalan Seri Tanjung Pinang, Tanjung Tokong, Penang",    region:"Tanjung Tokong",   lat:5.4555119, lng:100.310950,  price:704000,   priceStr:"RM 704,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"614–1,625",   completion:"2028",       img:"https://static.wixstatic.com/media/431cfd_464a61990c064b02ab9bb6d7980c508f~mv2.png", blog:"https://www.dreamerlab.blog/post/crown-penang" },
-  { id:9,  name:"Laguna Bay Residences",      addr:"Solok Teluk Kumbar, Teluk Kumbar, Penang",             region:"Teluk Kumbar",     lat:5.285401,  lng:100.235759,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2026 Q3",    img:"https://static.wixstatic.com/media/431cfd_e0e4e9cf563e4c75bdc24443c34b61bf~mv2.png", blog:"https://www.dreamerlab.blog/post/laguna-bay-residences-teluk-kumbar" },
+  { id:9,  name:"Laguna Bay Residences",      addr:"Solok Teluk Kumbar, Teluk Kumbar, Penang",             region:"Teluk Kumbar",     lat:5.285401,  lng:100.235759,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2026 Q3",  affordable:true,    img:"https://static.wixstatic.com/media/431cfd_e0e4e9cf563e4c75bdc24443c34b61bf~mv2.png", blog:"https://www.dreamerlab.blog/post/laguna-bay-residences-teluk-kumbar" },
   { id:10, name:"Goodwood Residence",         addr:"Jalan Tun Dr Awang, Bayan Lepas, Penang",              region:"Bayan Lepas",      lat:5.306146,  lng:100.269236,  price:678000,   priceStr:"RM 678,000",   tenure:"Freehold",  type:"Condominiums",        beds:[2,3,4], sqft:"1,075+",      completion:"Ready",      img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Goodwood+Residence",         blog:"" },
-  { id:11, name:"D'Hazelton",                 addr:"Lebuh Rambai 1, Paya Terubong, Penang",                region:"Paya Terubong",    lat:5.3826416, lng:100.2790332,  price:450000,   priceStr:"RM 450,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"900–1,000",   completion:"2029",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Hazelton",                 blog:"" },
-  { id:12, name:"Tuan Pavilion",              addr:"Solok Zoo 1, Air Itam, Penang",                        region:"Air Itam",         lat:5.3943458, lng:100.2800298,  price:694450,   priceStr:"RM 694,450",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,173–1,592", completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Tuan+Pavilion",              blog:"" },
+  { id:11, name:"D'Hazelton",                 addr:"Lebuh Rambai 1, Paya Terubong, Penang",                region:"Paya Terubong",    lat:5.3826416, lng:100.2790332,  price:450000,   priceStr:"RM 450,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"900–1,000",   completion:"2029",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Hazelton",                 blog:"" },
+  { id:12, name:"Tuan Pavilion",              addr:"Solok Zoo 1, Air Itam, Penang",                        region:"Air Itam",         lat:5.3943458, lng:100.2800298,  price:694450,   priceStr:"RM 694,450",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,173–1,592", completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Tuan+Pavilion",              blog:"https://www.dreamerlab.blog/post/tuan-pavilion-air-itam" },
   { id:13, name:"G'Vinton",                   addr:"Jalan Sultan Ahmad Shah, George Town, Penang",         region:"George Town",      lat:5.42415,  lng:100.32627,  price:500000,   priceStr:"RM 500,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2],   sqft:"387–1,303",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_308b4652ab334ff0a4aefc6e856bfeaf~mv2.png", blog:"https://www.dreamerlab.blog/post/g-vinton-george-town" },
   { id:14, name:"The Lighthauz",              addr:"The Light City, Gelugor, Penang",                      region:"Gelugor",          lat:5.3755739, lng:100.3175046,  price:890000,   priceStr:"RM 890,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[2,3],   sqft:"732–1,001",   completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=The+Lighthauz",              blog:"" },
-  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Tiara",                    blog:"" },
+  { id:15, name:"D'Tiara",                    addr:"Cangkat Bukit Belah 2, Teluk Kumbar, Penang",          region:"Teluk Kumbar",     lat:5.2893455, lng:100.2500702,  price:300000,   priceStr:"RM 300,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"700",         completion:"2026",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=D'Tiara",                    blog:"" },
   { id:16, name:"London Pavilion",            addr:"Jalan Permatang Damar Laut, Bayan Lepas, Penang",      region:"Bayan Lepas",      lat:5.28777,   lng:100.25648,  price:418000,   priceStr:"RM 418,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"982–1,342",   completion:"2027 Q4",    img:"https://placehold.co/360x164/1c1c1e/ffffff?text=London+Pavilion",            blog:"" },
   { id:17, name:"Blossom Suites",             addr:"Jalan Tanjung Bungah, Tanjung Bungah, Penang",         region:"Tanjung Bungah",   lat:5.467931, lng:100.276718,price:750000,   priceStr:"RM 750,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"506–2,852",   completion:"2029",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=Blossom+Suites",             blog:"" },
   { id:18, name:"Alton Skyvillas",            addr:"Jalan Jelutong, Jelutong, Penang",                     region:"Jelutong",         lat:5.392601,  lng:100.316138,  price:898560,   priceStr:"RM 898,560",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"1,132–2,672", completion:"2026",       img:"https://static.wixstatic.com/media/431cfd_63dff1f3b25e4a4dac3ddd9b0a87f95d~mv2.png", blog:"https://www.dreamerlab.blog/post/alton-skyvillas-jelutong" },
-  { id:19, name:"TwinStar",                   addr:"Lintang Slim, Jelutong, Penang",                       region:"Jelutong",         lat:5.399509,  lng:100.310904,  price:438000,   priceStr:"RM 438,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2028",       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=TwinStar",                    blog:"" },
+  { id:19, name:"TwinStar",                   addr:"Lintang Slim, Jelutong, Penang",                       region:"Jelutong",         lat:5.399509,  lng:100.310904,  price:438000,   priceStr:"RM 438,000",   tenure:"Freehold",  type:"Condominiums",        beds:[3],     sqft:"900",         completion:"2028",  affordable:true,       img:"https://placehold.co/360x164/1c1c1e/ffffff?text=TwinStar",                    blog:"" },
   { id:20, name:"Avéa",                       addr:"Andaman Island, Penang",                               region:"Andaman Island",   lat:5.442636,  lng:100.321661,  price:683000,   priceStr:"RM 683,000",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[1,2,3], sqft:"678–1,076",   completion:"2030",       img:"https://static.wixstatic.com/media/431cfd_38f3971e636c42a4be6f2a7f626c35c5~mv2.png", blog:"https://www.dreamerlab.blog/post/ave-a-andaman-island" },
   { id:22, name:"Queens Residences Q3",        addr:"Queens Waterfront, Queensbay, Bayan Lepas, Penang",    region:"Queensbay",        lat:5.3348967, lng:100.3107444,  price:958130,   priceStr:"RM 958,130",   tenure:"Freehold",  type:"Condominiums",        beds:[3,4],   sqft:"950–1,400",   completion:"2027",       img:"https://static.wixstatic.com/media/431cfd_f1a178663d154accaf17cbdf9d6f45b8~mv2.png", blog:"https://www.dreamerlab.blog/post/queens-residences-q3-queens-waterfront" },
   { id:23, name:"Pinnacle Bukit Gambier",      addr:"Jalan Bukit Gambir, Gelugor, Penang",                  region:"Gelugor",          lat:5.3668766, lng:100.2959225, price:813800,   priceStr:"RM 813,800",   tenure:"Freehold",  type:"Serviced Apartment",  beds:[3,4],   sqft:"1,077–1,734", completion:"2030 Q1",    img:"https://static.wixstatic.com/media/431cfd_57f31518b0a54989b9c9a4a2fe6e205d~mv2.png", blog:"https://www.dreamerlab.blog/post/pinnacle-bukit-gambier-gelugor" },
   // ── 大陆 ──
-  { id:21, name:"Ayana Residence",            addr:"Lorong Seri Tawar 1, Butterworth, Penang",             region:"Butterworth",      lat:5.4801442, lng:100.3850663,  price:335000,   priceStr:"RM 335,000",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"850–900",     completion:"Ready",      img:"https://static.wixstatic.com/media/431cfd_b26fcff783f846ec8ddb36f7df86b4b8~mv2.png", blog:"https://www.dreamerlab.blog/post/ayana-residence-jayamas" }
+  { id:21, name:"Ayana Residence",            addr:"Lorong Seri Tawar 1, Butterworth, Penang",             region:"Butterworth",      lat:5.4801442, lng:100.3850663,  price:335000,   priceStr:"RM 335,000",   tenure:"Freehold",  type:"Apartments",          beds:[3],     sqft:"850–900",     completion:"Ready",  affordable:true,      img:"https://static.wixstatic.com/media/431cfd_b26fcff783f846ec8ddb36f7df86b4b8~mv2.png", blog:"https://www.dreamerlab.blog/post/ayana-residence-jayamas" }
 ];
 
 const ZONE_HOODS = {
@@ -593,10 +710,12 @@ function popupHTML(p) {
       <div class="pop-name">${p.name}</div>
       <div class="pop-addr">${p.addr}</div>
       <div class="pop-price">${p.priceStr}<span class="pop-price-label">起价</span></div>
+      ${psfStr(p) ? `<div style="font-size:11px;color:#8e8e93;margin-top:2px;">${psfStr(p)}</div>` : ''}
       <div class="pop-tags">
         <span class="pop-tag">${p.tenure}</span>
         <span class="pop-tag">${p.type}</span>
         <span class="pop-tag">Completion: ${p.completion}</span>
+        ${p.affordable ? `<span class="pop-tag" style="background:#34C759;color:#fff;font-weight:600;">Affordable</span>` : ''}
       </div>
       <div class="pop-meta">
         <span>🛏 ${p.beds.join('/')} 房</span>
@@ -622,7 +741,6 @@ function renderMarkers(list) {
     const m = L.marker([p.lat, p.lng], { icon: makeIcon(false) })
       .bindPopup(popupHTML(p), { maxWidth: 320, minWidth: 300 })
       .addTo(map);
-
     m.on('click', () => setActive(p.id));
     m.on('popupclose', () => { if (activeId === p.id) setActive(null); });
     markerById[p.id] = m;
@@ -651,6 +769,7 @@ function renderCards(list) {
         <div class="prop-card-top">
           <div class="prop-card-region">${p.region}</div>
           <div class="prop-card-tenure-badge">${p.tenure}</div>
+          ${p.affordable ? `<span class="badge-affordable">Affordable</span>` : ''}
         </div>
         <div class="prop-card-name">${p.name}</div>
         <div class="prop-card-meta">
@@ -661,7 +780,10 @@ function renderCards(list) {
           <span class="prop-card-meta-item">${p.sqft} sqft</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <div class="prop-card-price">${p.priceStr}</div>
+          <div style="display:flex;flex-direction:column;gap:1px;">
+            <div class="prop-card-price">${p.priceStr}</div>
+            ${psfStr(p) ? `<div style="font-size:9px;color:#aeaeb2;">${psfStr(p)}</div>` : ''}
+          </div>
           <div class="prop-card-completion">🏗 ${p.completion}</div>
         </div>
       </div>
@@ -718,6 +840,125 @@ function onMapMove() {
 map.on('moveend', onMapMove);
 map.on('zoomend', onMapMove);
 
+/* ═══ VIEW SWITCHING ═════════════════════════════ */
+let currentView = 'list';
+
+function switchView(target) {
+  currentView = target || (currentView === 'list' ? 'map' : 'list');
+  const listView = document.getElementById('list-view');
+  const mapView  = document.getElementById('main');
+  const btn      = document.getElementById('view-toggle');
+
+  if (currentView === 'map') {
+    listView.style.display = 'none';
+    mapView.style.display  = 'flex';
+    btn.textContent = '📋 列表';
+    map.invalidateSize();
+    applyFilters();
+  } else {
+    mapView.style.display  = 'none';
+    listView.style.display = 'flex';
+    btn.textContent = '🗺 地图';
+    renderListCards(getSorted(filteredProps));
+  }
+}
+
+function goToMap(id) {
+  switchView('map');
+  const p = PROPERTIES.find(x => x.id === id);
+  if (!p) return;
+  setTimeout(() => {
+    map.flyTo([p.lat, p.lng], 15, { animate: true, duration: 0.8 });
+    map.once('moveend', () => {
+      setActive(p.id);
+      markerById[p.id]?.openPopup();
+    });
+  }, 150);
+}
+
+/* ═══ POPUP OPEN → 锁住地图交互，关闭后解锁 ══════ */
+map.on('popupopen', function() {
+  map.dragging.disable();
+  map.scrollWheelZoom.disable();
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+  map.keyboard.disable();
+  map.boxZoom.disable();
+});
+map.on('popupclose', function() {
+  map.dragging.enable();
+  map.scrollWheelZoom.enable();
+  map.touchZoom.enable();
+  map.doubleClickZoom.enable();
+  map.keyboard.enable();
+  map.boxZoom.enable();
+});
+
+function renderListCards(list) {
+  const container = document.getElementById('list-cards');
+  const noRes     = document.getElementById('list-no-results');
+  container.innerHTML = '';
+  noRes.classList.toggle('show', list.length === 0);
+
+  document.getElementById('list-count').textContent =
+    list.length === 0 ? '' : list.length === 1 ? '1 个合作项目' : `${list.length} 个合作项目`;
+
+  list.forEach((p, i) => {
+    const hasImg = p.img && !p.img.includes('placehold');
+    const card = document.createElement('div');
+    card.className = 'list-card';
+    card.style.animationDelay = `${i * 30}ms`;
+    card.innerHTML = `
+      <div class="list-card-img" style="${hasImg ? `background-image:url('${p.img}')` : 'background:#2c2c2e'}"></div>
+      <div class="list-card-body">
+        <div>
+          <div class="list-card-badges">
+            <span class="list-card-region">${p.region}</span>
+            <span class="list-card-tenure">${p.tenure}</span>
+            ${p.affordable ? `<span class="badge-affordable">Affordable</span>` : ''}
+          </div>
+          <div class="list-card-name">${p.name}</div>
+          <div class="list-card-meta">
+            <span>${p.type}</span>
+            <span class="list-card-meta-dot">·</span>
+            <span>🛏 ${p.beds.join('/')} 房</span>
+            <span class="list-card-meta-dot">·</span>
+            <span>${p.sqft} sqft</span>
+          </div>
+          <div class="list-card-completion">🏗 ${p.completion}</div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+            <div>
+              <span class="list-card-price">${p.priceStr}</span>
+              <span class="list-card-price-label">起</span>
+            </div>
+            ${psfStr(p) ? `<span style="font-size:11px;color:#8e8e93;font-weight:500;">${psfStr(p)}</span>` : ''}
+          </div>
+          <div class="list-card-actions">
+            ${p.blog
+              ? `<a href="${p.blog}" target="_blank" class="list-btn list-btn-blog" onclick="event.stopPropagation()">查看博文 ↗</a>`
+              : `<span class="list-btn" style="opacity:0.4;cursor:default;background:rgba(0,0,0,0.06);color:#888">博文即将上线</span>`}
+            <button class="list-btn list-btn-map" onclick="event.stopPropagation();goToMap(${p.id})">📍 地图</button>
+          </div>
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+/* ═══ PSF ════════════════════════════════════════ */
+function calcPSF(p) {
+  if (!p.price || !p.sqft) return null;
+  const minSqft = parseInt(p.sqft.replace(/,/g, '').replace(/\+.*/, '').split(/[–\-]/)[0]);
+  if (!minSqft) return null;
+  return Math.round(p.price / minSqft);
+}
+function psfStr(p) {
+  const v = calcPSF(p);
+  return v ? `RM ${v.toLocaleString()} psf` : '';
+}
+
 /* ═══ FILTERS ════════════════════════════════════ */
 function completionVal(s) {
   if (!s || s === 'Ready') return 0;
@@ -764,6 +1005,11 @@ function applyFilters() {
     return true;
   });
 
+  if (currentView === 'list') {
+    renderListCards(getSorted(filteredProps));
+    return;
+  }
+
   renderMarkers(filteredProps);
   setActive(null);
 
@@ -792,6 +1038,10 @@ function resetAll() {
   document.getElementById('f-tenure').value = '';
   document.getElementById('f-sort').value   = '';
   filteredProps = [...PROPERTIES];
+  if (currentView === 'list') {
+    renderListCards(getSorted(filteredProps));
+    return;
+  }
   renderMarkers(filteredProps);
   setActive(null);
   suppressListUpdate = true;
@@ -801,7 +1051,7 @@ function resetAll() {
 
 /* ═══ INIT ═══════════════════════════════════════ */
 renderMarkers(PROPERTIES);
-onMapMove();
+renderListCards(getSorted(PROPERTIES)); // default list view
 </script>
 </body>
 </html>
